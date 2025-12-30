@@ -165,6 +165,10 @@ See [Ethical Guidelines](docs/guidelines/ETHICAL_GUIDELINES.md) for detailed usa
 
 MIT License - see [LICENSE](LICENSE) file for details
 
+## Code of Conduct
+
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
 ## Acknowledgments
 
 Built with inspiration from AFL, LibFuzzer, and Boofuzz. Designed for the security research community.
