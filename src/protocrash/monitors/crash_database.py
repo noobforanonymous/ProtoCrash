@@ -5,7 +5,7 @@ import sqlite3
 import json
 from datetime import datetime
 from typing import List, Dict, Optional
-from protocrash.core.types import CrashInfo, CrashType
+from protocrash.core.types import CrashInfo
 from protocrash.monitors.crash_bucketing import CrashBucket
 class CrashDatabase:
     """SQLite-based crash database for persistence and querying"""

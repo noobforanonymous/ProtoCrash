@@ -1,7 +1,7 @@
 """Crash detection and analysis"""
 import subprocess
 import signal
-from typing import List, Optional, Tuple
+from typing import List, Optional
 from protocrash.core.types import CrashInfo, CrashType
 class SignalHandler:
     """Handle Unix signals for crash detection"""
