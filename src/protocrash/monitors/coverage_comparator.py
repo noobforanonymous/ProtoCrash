@@ -21,21 +21,21 @@ class CoverageComparator:
 
         # Process 8 bytes at a time for speed
         chunk_size = 8
-        
+
         for i in range(0, len(virgin_map), chunk_size):
             # Get 8-byte chunks
             virgin_chunk = int.from_bytes(
                 virgin_map[i:i+chunk_size], 'little', signed=False
             ) if i + chunk_size <= len(virgin_map) else 0
-            
+
             trace_chunk = int.from_bytes(
                 trace_bits[i:i+chunk_size], 'little', signed=False
             ) if i + chunk_size <= len(trace_bits) else 0
-            
+
             # Check if any new bits
             if trace_chunk and (trace_chunk & virgin_chunk):
                 return True
-        
+
         return False
 
     @staticmethod
@@ -51,12 +51,12 @@ class CoverageComparator:
             Number of new bits
         """
         new_bits = 0
-        
+
         for i in range(len(virgin_map)):
             if i < len(trace_bits) and trace_bits[i]:
                 # Count set bits that are also set in virgin map
                 new_bits += bin(trace_bits[i] & virgin_map[i]).count('1')
-        
+
         return new_bits
 
     @staticmethod
@@ -73,12 +73,12 @@ class CoverageComparator:
         """
         if len(bitmap1) != len(bitmap2):
             return 0.0
-        
+
         matches = 0
         total = len(bitmap1)
-        
+
         for i in range(total):
             if bitmap1[i] == bitmap2[i]:
                 matches += 1
-        
+
         return matches / total if total > 0 else 0.0

@@ -31,14 +31,14 @@ class CorpusManager:
         """
         self.corpus_dir = Path(corpus_dir)
         self.corpus_dir.mkdir(parents=True, exist_ok=True)
-        
+
         self.metadata_file = self.corpus_dir / "metadata.json"
         self.entries: Dict[str, CorpusEntry] = {}
-        
+
         # Load existing corpus
         self._load_metadata()
 
-    def add_input(self, input_data: bytes, coverage_edges: int = 0, 
+    def add_input(self, input_data: bytes, coverage_edges: int = 0,
                   found_new_coverage: bool = False) -> str:
         """
         Add input to corpus
@@ -53,15 +53,15 @@ class CorpusManager:
         """
         # Calculate hash
         input_hash = hashlib.sha256(input_data).hexdigest()[:16]
-        
+
         # Skip if duplicate
         if input_hash in self.entries:
             return input_hash
-        
+
         # Save input file
         input_file = self.corpus_dir / f"{input_hash}.input"
         input_file.write_bytes(input_data)
-        
+
         # Create metadata entry
         import time
         entry = CorpusEntry(
@@ -72,10 +72,10 @@ class CorpusManager:
             found_new_coverage=found_new_coverage,
             timestamp=time.time()
         )
-        
+
         self.entries[input_hash] = entry
         self._save_metadata()
-        
+
         return input_hash
 
     def get_input(self, input_hash: str) -> Optional[bytes]:
@@ -90,11 +90,11 @@ class CorpusManager:
         """
         if input_hash not in self.entries:
             return None
-        
+
         input_file = self.corpus_dir / f"{input_hash}.input"
         if not input_file.exists():
             return None
-        
+
         return input_file.read_bytes()
 
     def get_random_input(self) -> Optional[bytes]:
@@ -106,7 +106,7 @@ class CorpusManager:
         """
         if not self.entries:
             return None
-        
+
         input_hash = random.choice(list(self.entries.keys()))
         return self.get_input(input_hash)
 
@@ -163,7 +163,7 @@ class CorpusManager:
             except Exception:
                 # Corrupt metadata, start fresh
                 pass
-        
+
         # Scan for files not in metadata (seed files)
 
         for file_path in self.corpus_dir.iterdir():
@@ -210,11 +210,11 @@ class CorpusManager:
                 "avg_input_size": 0,
                 "new_coverage_inputs": 0
             }
-        
+
         total_size = sum(entry.size for entry in self.entries.values())
-        new_coverage_count = sum(1 for entry in self.entries.values() 
+        new_coverage_count = sum(1 for entry in self.entries.values()
                                  if entry.found_new_coverage)
-        
+
         return {
             "corpus_size": len(self.entries),
             "total_size_bytes": total_size,

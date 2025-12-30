@@ -15,13 +15,13 @@ class CoverageMap:
             shared_memory: Use shared memory for IPC with target (future enhancement)
         """
         self.bitmap = bytearray(self.MAP_SIZE)
-        
+
         # Virgin map tracks unseen edges (0xFF = unseen, 0x00 = seen)
         self.virgin_map = bytearray([0xFF] * self.MAP_SIZE)
-        
+
         # Track previous location for edge calculation
         self.prev_location = 0
-        
+
         # Statistics
         self.total_edges_found = 0
         self.edges_in_last_run = 0
@@ -44,14 +44,14 @@ class CoverageMap:
         """
         # Calculate edge ID via XOR
         edge_id = current_location ^ self.prev_location
-        
+
         # Hash to bitmap index
         index = edge_id % self.MAP_SIZE
-        
+
         # Increment hit counter (with saturation at 255)
         if self.bitmap[index] < 255:
             self.bitmap[index] += 1
-        
+
         # Update previous location for next edge
         # Right shift to avoid reversing A->B to B->A
         self.prev_location = current_location >> 1
@@ -64,17 +64,17 @@ class CoverageMap:
             True if new edges or hit count buckets discovered
         """
         found_new = False
-        
+
         for i in range(self.MAP_SIZE):
             if self.bitmap[i]:
                 # Classify hit count into bucket
                 classified = self._count_class(self.bitmap[i])
-                
+
                 # Check if this bucket was virgin
                 if self.virgin_map[i] & classified:
                     found_new = True
                     self.edges_in_last_run += 1
-        
+
         return found_new
 
     def update_virgin_map(self) -> None:
@@ -84,7 +84,7 @@ class CoverageMap:
                 # Classify and mark as seen
                 classified = self._count_class(self.bitmap[i])
                 self.virgin_map[i] &= ~classified
-                
+
         self.total_edges_found += self.edges_in_last_run
 
     def get_edge_count(self) -> int:
@@ -103,10 +103,10 @@ class CoverageMap:
             Classified bitmap with bucketed hit counts
         """
         classified = bytearray(self.MAP_SIZE)
-        
+
         for i in range(self.MAP_SIZE):
             classified[i] = self._count_class(self.bitmap[i])
-        
+
         return classified
 
     def _count_class(self, count: int) -> int:
@@ -114,7 +114,7 @@ class CoverageMap:
         Classify hit count into bucket
 
         Buckets: 0, 1, 2, 3, 4-7, 8-15, 16-31, 32-127, 128+
-        
+
         Returns:
             Bucket identifier (bit pattern)
         """

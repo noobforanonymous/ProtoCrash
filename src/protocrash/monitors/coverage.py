@@ -21,7 +21,7 @@ class CoverageTracker:
         self.coverage_map = CoverageMap(shared_memory)
         self.comparator = CoverageComparator()
         self.analyzer = CoverageAnalyzer()
-        
+
         # Track coverage history
         self.coverage_history: List[bytearray] = []
         self.run_count = 0
@@ -39,14 +39,14 @@ class CoverageTracker:
             True if new coverage was found
         """
         has_new = self.coverage_map.has_new_coverage()
-        
+
         if has_new:
             # Save this coverage
             self.coverage_history.append(bytearray(self.coverage_map.bitmap))
-            
+
             # Mark as seen
             self.coverage_map.update_virgin_map()
-        
+
         return has_new
 
     def record_edge(self, current_location: int) -> None:

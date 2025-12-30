@@ -13,7 +13,7 @@ class QueueEntry:
     size: int
     execution_count: int
     coverage_contribution: int
-    
+
     def __lt__(self, other):
         """For heap comparison"""
         return self.priority < other.priority
@@ -40,12 +40,12 @@ class QueueScheduler:
         """
         if input_hash in self.in_queue:
             return
-        
+
         # Calculate priority (AFL-style scoring)
         priority = self._calculate_priority(
             size, coverage_contribution, execution_count
         )
-        
+
         entry = QueueEntry(
             priority=priority,
             input_hash=input_hash,
@@ -53,7 +53,7 @@ class QueueScheduler:
             execution_count=execution_count,
             coverage_contribution=coverage_contribution
         )
-        
+
         heapq.heappush(self.queue, entry)
         self.in_queue.add(input_hash)
 
@@ -66,10 +66,10 @@ class QueueScheduler:
         """
         if not self.queue:
             return None
-        
+
         entry = heapq.heappop(self.queue)
         self.in_queue.remove(entry.input_hash)
-        
+
         return entry.input_hash
 
     def peek_next(self) -> Optional[str]:
@@ -101,7 +101,7 @@ class QueueScheduler:
                 if i < len(self.queue):
                     heapq.heapify(self.queue)
                 self.in_queue.remove(input_hash)
-                
+
                 # Re-add with updated execution count
                 self.add_input(
                     input_hash,
@@ -142,16 +142,16 @@ class QueueScheduler:
         """
         # Favor inputs that found new coverage
         coverage_factor = 1.0 / (coverage_contribution + 1)
-        
+
         # Favor smaller inputs (faster execution)
         size_factor = size / 1024.0  # Normalize to KB
-        
+
         # Penalize heavily-executed inputs
         exec_factor = execution_count / 10.0
-        
+
         # Combined priority
         priority = (coverage_factor * 0.5) + (size_factor * 0.3) + (exec_factor * 0.2)
-        
+
         return priority
 
     def get_stats(self) -> dict:
@@ -168,9 +168,9 @@ class QueueScheduler:
                 "min_priority": 0.0,
                 "max_priority": 0.0
             }
-        
+
         priorities = [entry.priority for entry in self.queue]
-        
+
         return {
             "queue_depth": len(self.queue),
             "avg_priority": sum(priorities) / len(priorities),

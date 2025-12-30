@@ -80,12 +80,12 @@ class SanitizerMonitor:
     def extract_error_type(cls, stderr: bytes) -> str:
         """Extract sanitizer error type from stderr"""
         stderr_str = stderr.decode('utf-8', errors='ignore')
-        
+
         # Look for error description after sanitizer name
         for line in stderr_str.split('\n'):
             if 'Sanitizer' in line or 'ERROR:' in line:
                 return line.strip()
-        
+
         return "Unknown sanitizer error"
 
 
@@ -144,7 +144,7 @@ class CrashDetector:
             # Timeout = hang
             proc.kill()
             proc.communicate()
-            
+
             return CrashInfo(
                 crashed=True,
                 crash_type=CrashType.HANG,
@@ -170,7 +170,7 @@ class CrashDetector:
         input_data: bytes
     ) -> CrashInfo:
         """Analyze execution results for crashes"""
-        
+
         # Check for sanitizer crashes first
         if self.sanitizer_monitor.detect_asan(stderr):
             return CrashInfo(

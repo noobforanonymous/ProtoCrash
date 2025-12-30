@@ -50,19 +50,19 @@ class ExecutionMonitor:
         try:
             # Monitor while running
             timeout_seconds = self.timeout_ms / 1000
-            
+
             while proc.is_running() and (time.time() - start_time) < timeout_seconds:
                 try:
                     # Get memory info
                     mem_info = proc.memory_info()
                     peak_memory = max(peak_memory, mem_info.rss)
-                    
+
                     # Get CPU percent
                     cpu_percent = proc.cpu_percent(interval=0.1)
                     cpu_samples.append(cpu_percent)
-                    
+
                     time.sleep(0.05)  # Sample every 50ms
-                    
+
                 except (psutil.NoSuchProcess, psutil.AccessDenied):
                     break
 
@@ -84,7 +84,7 @@ class ExecutionMonitor:
 
         # Collect final stats
         execution_time = time.time() - start_time
-        
+
         try:
             # Get exit code if process finished
             if not proc.is_running():
@@ -94,7 +94,7 @@ class ExecutionMonitor:
                     exit_code = -1
             else:
                 exit_code = -1
-                
+
             mem_info = proc.memory_info()
             io_counters = proc.io_counters() if hasattr(proc, 'io_counters') else None
         except (psutil.NoSuchProcess, psutil.AccessDenied):

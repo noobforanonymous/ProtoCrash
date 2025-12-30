@@ -13,18 +13,18 @@ from protocrash.monitors.crash_classifier import CrashClassifier
 
 class CrashReporter:
     """Generate crash reports in multiple formats"""
-    
+
     def __init__(self, output_dir: str = "crash_reports"):
         """
         Initialize crash reporter
-        
+
         Args:
             output_dir: Directory for crash reports
         """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.classifier = CrashClassifier()  # Backward compatibility
-    
+
     def generate_crash_report(
         self,
         bucket: CrashBucket,
@@ -33,12 +33,12 @@ class CrashReporter:
     ) -> str:
         """
         Generate crash report
-        
+
         Args:
             bucket: Crash bucket
             crash_info: Crash information
             format: Output format ("json", "html", "markdown")
-            
+
         Returns:
             Path to generated report
         """
@@ -50,7 +50,7 @@ class CrashReporter:
             return self._generate_markdown_report(bucket, crash_info)
         else:
             raise ValueError(f"Unknown format: {format}")
-    
+
     def _generate_json_report(self, bucket: CrashBucket, crash_info: CrashInfo) -> str:
         """Generate JSON report"""
         report = {
@@ -69,13 +69,13 @@ class CrashReporter:
             },
             'stack_trace': bucket.stack_trace.to_dict() if bucket.stack_trace else None
         }
-        
+
         output_path = self.output_dir / f"crash_{bucket.crash_hash}.json"
         with open(output_path, 'w') as f:
             json.dump(report, f, indent=2)
-        
+
         return str(output_path)
-    
+
     def _generate_html_report(self, bucket: CrashBucket, crash_info: CrashInfo) -> str:
         """Generate HTML report"""
         html = f"""<!DOCTYPE html>
@@ -98,7 +98,7 @@ class CrashReporter:
 </head>
 <body>
     <h1>Crash Report</h1>
-    
+
     <div class="section">
         <h2>Summary</h2>
         <table>
@@ -113,40 +113,40 @@ class CrashReporter:
             <tr><td class="label">Input Size</td><td>{len(crash_info.input_data) if crash_info.input_data else 0} bytes</td></tr>
         </table>
     </div>
-    
+
     <div class="section">
         <h2>Stack Trace</h2>
         <pre>{str(bucket.stack_trace) if bucket.stack_trace else 'No stack trace available'}</pre>
     </div>
-    
+
     <div class="section">
         <h2>Error Output</h2>
         <pre>{crash_info.stderr.decode('utf-8', errors='ignore') if crash_info.stderr else 'No stderr output'}</pre>
     </div>
-    
+
     <div class="section">
         <h2>Reproduction</h2>
         <p>To reproduce this crash, use the saved input from: <code>crash_{bucket.crash_hash}.input</code></p>
     </div>
-    
+
     <footer style="margin-top: 30px; color: #666; font-size: 12px;">
         Generated at: {datetime.now().isoformat()}
     </footer>
 </body>
 </html>"""
-        
+
         output_path = self.output_dir / f"crash_{bucket.crash_hash}.html"
         with open(output_path, 'w') as f:
             f.write(html)
-        
+
         # Save input data
         if crash_info.input_data:
             input_path = self.output_dir / f"crash_{bucket.crash_hash}.input"
             with open(input_path, 'wb') as f:
                 f.write(crash_info.input_data)
-        
+
         return str(output_path)
-    
+
     def _generate_markdown_report(self, bucket: CrashBucket, crash_info: CrashInfo) -> str:
         """Generate Markdown report"""
         md = f"""# Crash Report: {bucket.crash_hash}
@@ -184,21 +184,21 @@ To reproduce this crash:
 ---
 *Generated: {datetime.now().isoformat()}*
 """
-        
+
         output_path = self.output_dir / f"crash_{bucket.crash_hash}.md"
         with open(output_path, 'w') as f:
             f.write(md)
-        
+
         return str(output_path)
-    
+
     def generate_summary_report(self, buckets: List[CrashBucket], format: str = "html") -> str:
         """
         Generate summary report for multiple crashes
-        
+
         Args:
             buckets: List of crash buckets
             format: Output format
-            
+
         Returns:
             Path to summary report
         """
@@ -208,7 +208,7 @@ To reproduce this crash:
             return self._generate_markdown_summary(buckets)
         else:
             raise ValueError(f"Unknown format: {format}")
-    
+
     def _generate_html_summary(self, buckets: List[CrashBucket]) -> str:
         """Generate HTML summary report"""
         rows = ""
@@ -221,7 +221,7 @@ To reproduce this crash:
                 </td>
                 <td>{bucket.count}</td>
             </tr>"""
-        
+
         html = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -242,7 +242,7 @@ To reproduce this crash:
     <h1>Crash Summary Report</h1>
     <p>Total unique crashes: <strong>{len(buckets)}</strong></p>
     <p>Total occurrences: <strong>{sum(b.count for b in buckets)}</strong></p>
-    
+
     <table>
         <thead>
             <tr>
@@ -256,31 +256,31 @@ To reproduce this crash:
             {rows}
         </tbody>
     </table>
-    
+
     <footer style="margin-top: 30px; color: #666; font-size: 12px;">
         Generated at: {datetime.now().isoformat()}
     </footer>
 </body>
 </html>"""
-        
+
         output_path = self.output_dir / "crash_summary.html"
         with open(output_path, 'w') as f:
             f.write(html)
-        
+
         return str(output_path)
-    
+
     def _generate_markdown_summary(self, buckets: List[CrashBucket]) -> str:
         """Generate Markdown summary report"""
         total_unique = len(buckets)
         total_occurrences = sum(b.count for b in buckets)
-        
+
         rows = ""
         for bucket in sorted(buckets, key=lambda b: b.count, reverse=True):
             rows += f"| {bucket.crash_type} | `{bucket.bucket_id[:12]}` | **{bucket.exploitability or 'UNKNOWN'}** | {bucket.count} |\n"
-        
+
         md = f"""# Crash Summary Report
 
-**Total Unique Crashes:** {total_unique}  
+**Total Unique Crashes:** {total_unique}
 **Total Occurrences:** {total_occurrences}
 
 ## Crashes
@@ -292,11 +292,11 @@ To reproduce this crash:
 ---
 *Generated: {datetime.now().isoformat()}*
 """
-        
+
         output_path = self.output_dir / "crash_summary.md"
         with open(output_path, 'w') as f:
             f.write(md)
-        
+
         return str(output_path)
 
     # Old API compatibility methods
@@ -304,15 +304,15 @@ To reproduce this crash:
         """Old API: Save crash to disk"""
         from protocrash.monitors.crash_bucketing import CrashBucketing
 
-        
+
         # Generate crash ID if not provided
         if crash_id is None:
             crash_id = self.classifier.generate_crash_id(crash_info)
-        
+
         # Save report
         output_path = self.output_dir / f"{crash_id}.json"
         exploitability = self.classifier.assess_exploitability(crash_info)
-        
+
         report = {
             'crash_id': crash_id,
             'crashed': crash_info.crashed,
@@ -320,23 +320,23 @@ To reproduce this crash:
             'exploitability': exploitability,
             'timestamp': __import__('datetime').datetime.now().isoformat()
         }
-        
+
 
         with open(output_path, 'w') as f:
             json.dump(report, f, indent=2)
-        
+
         # Save input file
         if crash_info.input_data:
             input_path = self.output_dir / f"{crash_id}.input"
             with open(input_path, 'wb') as f:
                 f.write(crash_info.input_data)
-        
+
         return Path(output_path)
-    
+
     def generate_report(self, crash_info, crash_id):
         """Old API: Generate report dict"""
         exploitability = self.classifier.assess_exploitability(crash_info)
-        
+
         return {
             'crash_id': crash_id,
             'crashed': crash_info.crashed,
@@ -344,7 +344,7 @@ To reproduce this crash:
             'exploitability': exploitability,
             'timestamp': __import__('datetime').datetime.now().isoformat()
         }
-    
+
     def list_crashes(self):
         """Old API: List all crashes"""
 
@@ -352,7 +352,7 @@ To reproduce this crash:
         for json_file in self.output_dir.glob("*.json"):
             crashes.append(json_file.stem)
         return crashes
-    
+
     def get_crash_report(self, crash_id):
         """Old API: Get crash report by ID"""
 

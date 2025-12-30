@@ -3,7 +3,7 @@
 from typing import List
 
 # Pre-compute interesting values as bytes for faster mutations
-_INTERESTING_8_BYTES = [v.to_bytes(1, 'little', signed=True) if v < 0 else v.to_bytes(1, 'little') 
+_INTERESTING_8_BYTES = [v.to_bytes(1, 'little', signed=True) if v < 0 else v.to_bytes(1, 'little')
                         for v in [-128, -1, 0, 1, 16, 32, 64, 100, 127]]
 _INTERESTING_16_BYTES = [v.to_bytes(2, 'little', signed=True) if v < 0 else v.to_bytes(2, 'little')
                          for v in [-32768, -129, 128, 255, 256, 512, 1000, 1024, 4096, 32767]]

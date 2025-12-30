@@ -9,18 +9,18 @@ import time
 
 class KeyboardHandler:
     """Non-blocking keyboard input handler"""
-    
+
     def __init__(self):
         self.paused = False
         self.should_refresh = False
         self.running = True
         self._thread = None
-        
+
     def start(self):
         """Start keyboard listener thread"""
         self._thread = threading.Thread(target=self._listen, daemon=True)
         self._thread.start()
-    
+
     def _listen(self):
         """Listen for keyboard input (cross-platform)"""
         try:
@@ -28,7 +28,7 @@ class KeyboardHandler:
             import termios
             import tty
             import select
-            
+
             old_settings = termios.tcgetattr(sys.stdin)
             try:
                 tty.setcbreak(sys.stdin.fileno())
@@ -38,7 +38,7 @@ class KeyboardHandler:
                         self._handle_key(key)
             finally:
                 termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
-                
+
         except (ImportError, OSError):
             # Fallback for Windows or non-TTY environments
             try:
@@ -51,7 +51,7 @@ class KeyboardHandler:
             except ImportError:
                 # No keyboard support available
                 pass
-    
+
     def _handle_key(self, key):
         """Handle keypress"""
         if key == 'p':
@@ -60,7 +60,7 @@ class KeyboardHandler:
             self.should_refresh = True
         elif key == 'q':
             self.running = False
-    
+
     def stop(self):
         """Stop keyboard listener"""
         self.running = False

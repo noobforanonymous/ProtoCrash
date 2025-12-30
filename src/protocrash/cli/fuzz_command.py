@@ -13,7 +13,7 @@ def run_fuzz_campaign(target, protocol, corpus_dir, crashes_dir, timeout_ms,
                       num_workers, duration, max_iterations, verbose):
     """
     Run fuzzing campaign with specified configuration.
-    
+
     Args:
         target: Target binary or server
         protocol: Protocol type
@@ -27,25 +27,25 @@ def run_fuzz_campaign(target, protocol, corpus_dir, crashes_dir, timeout_ms,
     """
     from protocrash.fuzzing_engine.coordinator import FuzzingConfig, FuzzingCoordinator
     from protocrash.distributed import DistributedCoordinator
-    
+
     console = Console()
-    
+
     # Create corpus and crashes directories if they don't exist
     Path(corpus_dir).mkdir(parents=True, exist_ok=True)
     Path(crashes_dir).mkdir(parents=True, exist_ok=True)
-    
+
     # Display banner
     console.print(Panel.fit(
         "[bold cyan]ProtoCrash Fuzzing Campaign[/bold cyan]\\n"
         "Coverage-Guided Protocol Fuzzer",
         border_style="cyan"
     ))
-    
+
     # Display configuration
     config_table = Table(title="Configuration", show_header=False)
     config_table.add_column("Setting", style="cyan")
     config_table.add_column("Value", style="green")
-    
+
     config_table.add_row("Target", str(target))
     config_table.add_row("Protocol", protocol)
     config_table.add_row("Corpus", corpus_dir)
@@ -56,10 +56,10 @@ def run_fuzz_campaign(target, protocol, corpus_dir, crashes_dir, timeout_ms,
         config_table.add_row("Duration", f"{duration}s")
     if max_iterations:
         config_table.add_row("Max Iterations", str(max_iterations))
-    
+
     console.print(config_table)
     console.print()
-    
+
     # Validate inputs with helpful error messages
     validation_errors = _validate_inputs(target, corpus_dir, timeout_ms, num_workers, console)
     if validation_errors:
@@ -67,10 +67,10 @@ def run_fuzz_campaign(target, protocol, corpus_dir, crashes_dir, timeout_ms,
             console.print(f"[bold red]✗ {error}[/bold red]")
         console.print("\n[yellow]💡 Tip: Run 'protocrash fuzz --help' for usage examples[/yellow]")
         sys.exit(1)
-    
+
     # Parse target
     target_cmd = _parse_target(target, console)
-    
+
     try:
         # Create fuzzing configuration
         config = FuzzingConfig(
@@ -81,28 +81,28 @@ def run_fuzz_campaign(target, protocol, corpus_dir, crashes_dir, timeout_ms,
             max_iterations=max_iterations,
             stats_interval=10
         )
-        
+
         if num_workers > 1:
             # Distributed fuzzing
             console.print(f"[bold green]Starting distributed fuzzing with {num_workers} workers...[/bold green]")
             console.print("[yellow]Note: Real-time dashboard available via separate viewer.[/yellow]")
             console.print()
-            
+
             coordinator = DistributedCoordinator(config, num_workers=num_workers)
             coordinator.run(duration=duration)
-            
+
         else:
             # Single-process fuzzing
             console.print("[bold green]Starting single-process fuzzing...[/bold green]")
             console.print("[yellow]Tip: Use --workers N for parallel fuzzing.[/yellow]")
             console.print()
-            
+
             # Note: Real-time dashboard can be viewed using 'protocrash report --live'
             coordinator = FuzzingCoordinator(config)
             coordinator.run()
-        
+
         console.print("\\n[bold green]✓ Fuzzing campaign completed successfully![/bold green]")
-        
+
     except KeyboardInterrupt:
         console.print("\\n[yellow]Fuzzing campaign interrupted by user[/yellow]")
         sys.exit(0)
@@ -116,7 +116,7 @@ def run_fuzz_campaign(target, protocol, corpus_dir, crashes_dir, timeout_ms,
 def _validate_inputs(target, corpus_dir, timeout_ms, num_workers, console):
     """Validate fuzzing inputs and return list of errors"""
     errors = []
-    
+
     # Validate target
     if not target:
         errors.append("Target cannot be empty")
@@ -130,7 +130,7 @@ def _validate_inputs(target, corpus_dir, timeout_ms, num_workers, console):
             errors.append(f"Target is not a file: {target}")
         elif not target_path.stat().st_mode & 0o111:
             console.print(f"[yellow]⚠ Warning: Target may not be executable: {target}[/yellow]")
-    
+
     # Validate corpus directory
     corpus_path = Path(corpus_dir)
     if corpus_path.exists():
@@ -138,7 +138,7 @@ def _validate_inputs(target, corpus_dir, timeout_ms, num_workers, console):
         if not seeds:
             console.print(f"[yellow]⚠ Warning: Corpus directory is empty: {corpus_dir}[/yellow]")
             console.print(f"[yellow]  → Add seed files or fuzzer will generate random inputs[/yellow]")
-    
+
     # Validate timeout
     if timeout_ms <= 0:
         errors.append(f"Timeout must be positive, got: {timeout_ms}ms")
@@ -146,27 +146,27 @@ def _validate_inputs(target, corpus_dir, timeout_ms, num_workers, console):
         console.print(f"[yellow]⚠ Warning: Very short timeout ({timeout_ms}ms) may cause false positives[/yellow]")
     elif timeout_ms > 60000:
         console.print(f"[yellow]⚠ Warning: Long timeout ({timeout_ms}ms) will slow fuzzing[/yellow]")
-    
+
     # Validate workers
     if num_workers <= 0:
         errors.append(f"Number of workers must be positive, got: {num_workers}")
     elif num_workers > 32:
         console.print(f"[yellow]⚠ Warning: {num_workers} workers may overwhelm system[/yellow]")
-    
+
     return errors
 
 
 def _parse_target(target: str, console) -> list:
     """
     Parse target specification into command list.
-    
+
     Args:
         target: Target specification (binary path or tcp://host:port)
         console: Rich console for warnings
-        
+
     Returns:
         Command list for FuzzingConfig
-        
+
     Note:
         Network fuzzing (tcp://, udp://) requires protocol-specific
         implementation and is planned for future releases.

@@ -8,24 +8,24 @@ from typing import Dict, Any
 @dataclass
 class FuzzingStats:
     """Track fuzzing statistics"""
-    
+
     # Execution stats
     total_execs: int = 0
     unique_crashes: int = 0
     unique_hangs: int = 0
-    
+
     # Coverage stats
     total_edges: int = 0
     coverage_percent: float = 0.0
-    
+
     # Corpus stats
     corpus_size: int = 0
     queue_depth: int = 0
-    
+
     # Performance stats
     execs_per_sec: float = 0.0
     time_elapsed: float = 0.0
-    
+
     # Timestamp
     start_time: float = 0.0
     last_update: float = 0.0
@@ -81,7 +81,7 @@ class FuzzingStats:
         """Update performance metrics"""
         self.last_update = time.time()
         self.time_elapsed = self.last_update - self.start_time
-        
+
         if self.time_elapsed > 0:
             self.execs_per_sec = self.total_execs / self.time_elapsed
 
@@ -93,7 +93,7 @@ class FuzzingStats:
             Formatted statistics for display
         """
         self._update_performance()
-        
+
         return f"""
 ╔══════════════════════════════════════════════════════════════╗
 ║                    FUZZING STATISTICS                         ║

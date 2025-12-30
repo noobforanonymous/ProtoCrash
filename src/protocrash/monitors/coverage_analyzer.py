@@ -33,21 +33,21 @@ class CoverageAnalyzer:
         max_hit = 0
         sum_hits = 0
         hot_edges = []
-        
+
         for i, count in enumerate(bitmap):
             if count > 0:
                 unique_edges += 1
                 total_edges += count
                 sum_hits += count
                 max_hit = max(max_hit, count)
-                
+
                 # Track hot edges (hit > 100 times)
                 if count > 100:
                     hot_edges.append(i)
-        
+
         edge_density = (unique_edges / len(bitmap)) * 100 if len(bitmap) > 0 else 0.0
         avg_hit = sum_hits / unique_edges if unique_edges > 0 else 0.0
-        
+
         return CoverageStats(
             total_edges=total_edges,
             unique_edges=unique_edges,
@@ -72,7 +72,7 @@ class CoverageAnalyzer:
         """
         virgin = bytearray([0xFF] * map_size)
         interesting = []
-        
+
         for input_id, bitmap in corpus_coverage.items():
             # Check if this input provides new coverage
             has_new = False
@@ -80,12 +80,12 @@ class CoverageAnalyzer:
                 if bitmap[i] and (bitmap[i] & virgin[i]):
                     has_new = True
                     break
-            
+
             if has_new:
                 interesting.append(input_id)
                 # Update virgin map
                 for i in range(min(len(bitmap), len(virgin))):
                     if bitmap[i]:
                         virgin[i] &= ~bitmap[i]
-        
+
         return interesting

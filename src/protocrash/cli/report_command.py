@@ -12,7 +12,7 @@ from rich.panel import Panel
 def generate_report(campaign_dir, output_format, output_path, verbose):
     """
     Generate fuzzing campaign report.
-    
+
     Args:
         campaign_dir: Campaign directory with corpus and crashes
         output_format: Report format (text, html, json)
@@ -20,17 +20,17 @@ def generate_report(campaign_dir, output_format, output_path, verbose):
         verbose: Verbosity level
     """
     console = Console()
-    
+
     # Display banner
     console.print(Panel.fit(
         "[bold magenta]ProtoCrash Report Generator[/bold magenta]\n"
         f"Generating {output_format.upper()} report",
         border_style="magenta"
     ))
-    
+
     # Collect campaign data
     campaign_data = _collect_campaign_data(campaign_dir, console)
-    
+
     # Generate report based on format
     if output_format == 'html':
         _generate_html_report(campaign_data, output_path, console)
@@ -38,7 +38,7 @@ def generate_report(campaign_dir, output_format, output_path, verbose):
         _generate_json_report(campaign_data, output_path, console)
     else:  # text
         _generate_text_report(campaign_data, output_path, console)
-    
+
     console.print(f"\n[bold green]✓ Report generated: {output_path}[/bold green]")
 
 
@@ -51,12 +51,12 @@ def _collect_campaign_data(campaign_dir: Path, console: Console) -> dict:
     else:
         corpus_dir = Path("./corpus")
         crashes_dir = Path("./crashes")
-    
+
     console.print(f"[cyan]Collecting data from campaign...[/cyan]")
-    
+
     # Count corpus inputs
     corpus_count = len(list(corpus_dir.glob("*"))) if corpus_dir.exists() else 0
-    
+
     # Load crashes
     crashes = []
     if crashes_dir.exists():
@@ -70,9 +70,9 @@ def _collect_campaign_data(campaign_dir: Path, console: Console) -> dict:
                     'size': crash_file.stat().st_size,
                     'timestamp': datetime.fromtimestamp(crash_file.stat().st_mtime).isoformat()
                 })
-    
+
     console.print(f"[green]Found {corpus_count} corpus inputs, {len(crashes)} crashes[/green]")
-    
+
     return {
         'timestamp': datetime.now().isoformat(),
         'corpus_count': corpus_count,
@@ -95,10 +95,10 @@ Campaign Summary:
 
 Crashes:
 """
-    
+
     for i, crash in enumerate(data['crashes'], 1):
         report += f"  {i}. {crash['name']} ({crash['size']} bytes) - {crash['timestamp']}\n"
-    
+
     Path(output_path).write_text(report)
 
 
@@ -110,7 +110,7 @@ def _generate_json_report(data: dict, output_path: str, console: Console):
 def _generate_html_report(data: dict, output_path: str, console: Console):
     """Generate HTML report using advanced generator"""
     from protocrash.cli.ui.html_generator import generate_advanced_html_report
-    
+
     # Add required stats structure for advanced generator
     if 'stats' not in data:
         data['stats'] = {
@@ -119,6 +119,6 @@ def _generate_html_report(data: dict, output_path: str, console: Console):
             'crash_count': data.get('crash_count', 0),
             'exec_per_sec': data.get('exec_per_sec', 0)
         }
-    
+
     # Generate advanced HTML report with Chart.js
     generate_advanced_html_report(data, output_path)

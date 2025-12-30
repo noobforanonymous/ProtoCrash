@@ -7,7 +7,7 @@ from ..parsers.http_parser import HttpRequest
 
 class HttpTemplates:
     """Factory for common HTTP requests"""
-    
+
     COMMON_HEADERS = {
         "User-Agent": ["ProtoCrash/1.0"],
         "Accept": ["*/*"],
@@ -20,7 +20,7 @@ class HttpTemplates:
         req_headers = HttpTemplates.COMMON_HEADERS.copy()
         if headers:
             req_headers.update(headers)
-            
+
         return HttpRequest(
             method="GET",
             path=path,
@@ -33,10 +33,10 @@ class HttpTemplates:
         req_headers = HttpTemplates.COMMON_HEADERS.copy()
         req_headers["Content-Length"] = [str(len(body))]
         req_headers["Content-Type"] = ["application/x-www-form-urlencoded"]
-        
+
         if headers:
             req_headers.update(headers)
-            
+
         return HttpRequest(
             method="POST",
             path=path,
@@ -49,10 +49,10 @@ class HttpTemplates:
         """Create PUT request"""
         req_headers = HttpTemplates.COMMON_HEADERS.copy()
         req_headers["Content-Length"] = [str(len(body))]
-        
+
         if headers:
             req_headers.update(headers)
-            
+
         return HttpRequest(
             method="PUT",
             path=path,
@@ -66,7 +66,7 @@ class HttpTemplates:
         req_headers = HttpTemplates.COMMON_HEADERS.copy()
         if headers:
             req_headers.update(headers)
-            
+
         return HttpRequest(
             method="DELETE",
             path=path,
@@ -78,7 +78,7 @@ class HttpTemplates:
         """Create request with Bearer authentication"""
         headers = HttpTemplates.COMMON_HEADERS.copy()
         headers["Authorization"] = [f"Bearer {token}"]
-        
+
         return HttpRequest(
             method=method,
             path=path,
@@ -90,7 +90,7 @@ class HttpTemplates:
         """Create request with cookie"""
         headers = HttpTemplates.COMMON_HEADERS.copy()
         headers["Cookie"] = [cookie]
-        
+
         return HttpRequest(
             method=method,
             path=path,

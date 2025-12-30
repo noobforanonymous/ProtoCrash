@@ -14,7 +14,7 @@ import click
 def cli(ctx, verbose, quiet, config):
     """
     ProtoCrash - Coverage-Guided Protocol Fuzzer
-    
+
     A smart mutation-based fuzzer for finding vulnerabilities in protocol implementations.
     """
     # Store global options in context
@@ -26,39 +26,39 @@ def cli(ctx, verbose, quiet, config):
 
 @cli.command()
 @click.option('--target', required=True, help='Target binary or server (e.g., ./target or tcp://localhost:8080)')
-@click.option('--protocol', type=click.Choice(['http', 'dns', 'smtp', 'custom']), default='custom', 
+@click.option('--protocol', type=click.Choice(['http', 'dns', 'smtp', 'custom']), default='custom',
               help='Protocol type for structure-aware mutations')
-@click.option('--corpus', type=click.Path(), default='./corpus', 
+@click.option('--corpus', type=click.Path(), default='./corpus',
               help='Corpus directory containing seed inputs')
-@click.option('--crashes', type=click.Path(), default='./crashes', 
+@click.option('--crashes', type=click.Path(), default='./crashes',
               help='Directory to save discovered crashes')
-@click.option('--timeout', type=int, default=5000, 
+@click.option('--timeout', type=int, default=5000,
               help='Execution timeout in milliseconds (default: 5000ms)')
-@click.option('--workers', type=int, default=1, 
+@click.option('--workers', type=int, default=1,
               help='Number of parallel workers for distributed fuzzing (default: 1)')
 @click.option('--duration', type=int,
               help='Campaign duration in seconds (runs indefinitely if not set)')
-@click.option('--max-iterations', type=int, 
+@click.option('--max-iterations', type=int,
               help='Maximum number of fuzzing iterations (overrides duration)')
 @click.pass_context
 def fuzz(ctx, target, protocol, corpus, crashes, timeout, workers, duration, max_iterations):
     """
     Start a fuzzing campaign against the target.
-    
+
     \b
     EXAMPLES:
       # Basic fuzzing of a local binary
       $ protocrash fuzz --target ./vulnerable_app --corpus ./seeds
-      
+
       # Distributed fuzzing with 8 workers for 1 hour
       $ protocrash fuzz --target ./app --workers 8 --duration 3600
-      
+
       # HTTP protocol fuzzing with custom timeout
       $ protocrash fuzz --target tcp://localhost:8080 --protocol http --timeout 10000
-      
+
       # Quick test run with iteration limit
       $ protocrash fuzz --target ./app --max-iterations 1000
-    
+
     \b
     TIPS:
       • Start with 1-2 workers and scale up based on CPU usage
@@ -67,7 +67,7 @@ def fuzz(ctx, target, protocol, corpus, crashes, timeout, workers, duration, max
       • Monitor crashes directory for discovered bugs
     """
     from protocrash.cli.fuzz_command import run_fuzz_campaign
-    
+
     run_fuzz_campaign(
         target=target,
         protocol=protocol,
@@ -90,20 +90,20 @@ def fuzz(ctx, target, protocol, corpus, crashes, timeout, workers, duration, max
 def analyze(ctx, crash_dir, classify, dedupe, format):
     """
     Analyze discovered crashes.
-    
+
     Examples:
-    
+
       # Analyze and classify crashes
       protocrash analyze --crash-dir ./crashes --classify
-      
+
       # Deduplicate crashes
       protocrash analyze --crash-dir ./crashes --dedupe
-      
+
       # JSON output
       protocrash analyze --crash-dir ./crashes --format json
     """
     from protocrash.cli.analyze_command import run_crash_analysis
-    
+
     run_crash_analysis(
         crash_dir=crash_dir,
         classify=classify,
@@ -121,20 +121,20 @@ def analyze(ctx, crash_dir, classify, dedupe, format):
 def report(ctx, campaign, format, output):
     """
     Generate fuzzing campaign report.
-    
+
     Examples:
-    
+
       # Generate HTML report
       protocrash report --campaign ./campaign --format html --output report.html
-      
+
       # Generate text summary
       protocrash report --campaign ./campaign --format text --output summary.txt
-      
+
       # Generate JSON data
       protocrash report --campaign ./campaign --format json --output data.json
     """
     from protocrash.cli.report_command import generate_report
-    
+
     generate_report(
         campaign_dir=campaign,
         output_format=format,
