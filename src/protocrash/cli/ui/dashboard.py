@@ -2,7 +2,7 @@
 Real-Time Fuzzing Dashboard using Rich with Keyboard Controls
 """
 import time
-fromimport timedelta
+from datetime import timedelta
 from rich.console import Console
 from rich.live import Live
 from rich.table import Table

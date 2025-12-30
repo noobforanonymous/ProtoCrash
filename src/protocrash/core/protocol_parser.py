@@ -4,7 +4,7 @@ Defines interface for all protocol parsers
 """
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Optional, Dict
+from typing import Optional
 @dataclass
 class ProtocolMessage(ABC):
     """Base class for protocol-specific messages"""

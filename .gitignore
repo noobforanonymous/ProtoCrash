@@ -72,3 +72,4 @@ logs/
 !crashes/.gitkeep
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+coverage.xml

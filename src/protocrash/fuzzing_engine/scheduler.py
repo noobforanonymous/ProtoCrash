@@ -1,6 +1,6 @@
 """Queue scheduling for input prioritization"""
 import heapq
-from typing import List, Optional, Tuple
+from typing import List, Optional
 from dataclasses import dataclass
 @dataclass
 class QueueEntry:

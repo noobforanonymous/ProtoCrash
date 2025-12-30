@@ -7,7 +7,7 @@ import os
 import time
 import hashlib
 from pathlib import Path
-from typing import Optional, List, Tuple
+from typing import Optional, List
 from dataclasses import dataclass
 @dataclass
 class SyncedInput:

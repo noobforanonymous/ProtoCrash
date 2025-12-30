@@ -4,7 +4,7 @@ Enhanced crash reporting with multiple output formats
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 from protocrash.core.types import CrashInfo
 from protocrash.monitors.crash_bucketing import CrashBucket
 from protocrash.monitors.crash_classifier import CrashClassifier
