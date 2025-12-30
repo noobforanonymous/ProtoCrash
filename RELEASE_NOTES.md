@@ -1,7 +1,5 @@
 # ProtoCrash v1.0.0 Release Notes
 
-**Release Date:** December 29, 2025
-
 ---
 
 ## Initial Release
@@ -106,4 +104,4 @@ Built with inspiration from AFL, LibFuzzer, and Boofuzz.
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT License - see [LICENSE](LICENSE) file for details.

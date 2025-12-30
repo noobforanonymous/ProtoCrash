@@ -163,7 +163,7 @@ See [Ethical Guidelines](docs/guidelines/ETHICAL_GUIDELINES.md) for detailed usa
 
 ## License
 
-MIT License - see LICENSE file for details
+MIT License - see [LICENSE](LICENSE) file for details
 
 ## Acknowledgments
 
