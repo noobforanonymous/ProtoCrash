@@ -7,9 +7,9 @@ __license__ = "MIT"
 from protocrash.core.types import CrashInfo, CrashType, ParsedMessage, ProtocolType
 
 __all__ = [
-    "__version__",
     "CrashInfo",
     "CrashType",
     "ParsedMessage",
     "ProtocolType",
+    "__version__",
 ]

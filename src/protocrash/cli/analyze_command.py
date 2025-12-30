@@ -1,11 +1,12 @@
 """
-Analyze Command Implementation  
+Analyze Command Implementation
 """
 
 from pathlib import Path
+
 from rich.console import Console
-from rich.table import Table
 from rich.panel import Panel
+from rich.table import Table
 
 
 def run_crash_analysis(crash_dir, classify, dedupe, output_format, verbose):
