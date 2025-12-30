@@ -1,0 +1,36 @@
+# ProtoCrash Configuration
+# Sample configuration file
+
+# Fuzzer settings
+fuzzer:
+  timeout_ms: 5000
+  memory_limit: "1G"
+  workers: 4
+  max_iterations: null
+
+# Corpus management
+corpus:
+  sync_interval: 5.0
+  minimize: true
+  dedup: true
+
+# Mutation settings
+mutations:
+  strategies:
+    bitflip: 30
+    byteflip: 20
+    arithmetic: 15
+    interesting: 10
+    dictionary: 15
+    havoc: 10
+
+# Reporting
+reporting:
+  format: html
+  charts: true
+  include_inputs: false
+
+# Distributed fuzzing
+distributed:
+  sync_interval: 5.0
+  stats_interval: 2.0
