@@ -121,7 +121,7 @@ Distributed fuzzing scales efficiently:
 |--------|-------|
 | Tests | 859 passing (100%) |
 | Coverage | 96% |
-| Production Code | 9,093 lines |
+| Code | 9,093 lines |
 | Test Code | 12,661 lines |
 | Platforms | Linux (full), Windows (partial) |
 
