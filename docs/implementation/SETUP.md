@@ -37,7 +37,7 @@ protocrash --version
 
 ```bash
 # Clone repository
-git clone https://github.com/noobforanonymous/ProtoCrash.git
+git clone https://github.com/regaan/ProtoCrash.git
 cd ProtoCrash
 
 # Create virtual environment (recommended)
@@ -55,13 +55,13 @@ protocrash --version
 
 ```bash
 # Pull Docker image
-docker pull noobforanonymous/protocrash:latest
+docker pull regaan/protocrash:latest
 
 # Run container
 docker run -it --rm \
   -v $(pwd)/corpus:/app/corpus \
   -v $(pwd)/crashes:/app/crashes \
-  noobforanonymous/protocrash:latest
+  regaan/protocrash:latest
 ```
 
 ---
@@ -102,7 +102,7 @@ pip install matplotlib
 
 ```bash
 # Clone with development dependencies
-git clone https://github.com/noobforanonymous/ProtoCrash.git
+git clone https://github.com/regaan/ProtoCrash.git
 cd ProtoCrash
 
 # Install development dependencies
@@ -280,7 +280,7 @@ protocrash fuzz --timeout 10000  # 10 seconds
 
 ### Getting Help
 
-- GitHub Issues: https://github.com/noobforanonymous/ProtoCrash/issues
+- GitHub Issues: https://github.com/regaan/ProtoCrash/issues
 - Documentation: https://protocrash.readthedocs.io
 - Discord: [Community Server Link]
 

@@ -11,7 +11,7 @@ setup(
     description="Coverage-guided protocol fuzzer for vulnerability discovery",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/noobforanonymous/ProtoCrash",
+    url="https://github.com/regaan/ProtoCrash",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     classifiers=[
@@ -58,8 +58,8 @@ setup(
         ],
     },
     project_urls={
-        "Bug Reports": "https://github.com/noobforanonymous/ProtoCrash/issues",
-        "Source": "https://github.com/noobforanonymous/ProtoCrash",
+        "Bug Reports": "https://github.com/regaan/ProtoCrash/issues",
+        "Source": "https://github.com/regaan/ProtoCrash",
         "Documentation": "https://protocrash.readthedocs.io",
     },
 )

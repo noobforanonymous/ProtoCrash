@@ -48,10 +48,10 @@ dev = [
 protocrash = "protocrash.cli.main:cli"
 
 [project.urls]
-Homepage = "https://github.com/noobforanonymous/ProtoCrash"
-Documentation = "https://github.com/noobforanonymous/ProtoCrash/tree/main/docs"
-Repository = "https://github.com/noobforanonymous/ProtoCrash.git"
-Issues = "https://github.com/noobforanonymous/ProtoCrash/issues"
+Homepage = "https://github.com/regaan/ProtoCrash"
+Documentation = "https://github.com/regaan/ProtoCrash/tree/main/docs"
+Repository = "https://github.com/regaan/ProtoCrash.git"
+Issues = "https://github.com/regaan/ProtoCrash/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

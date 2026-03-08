@@ -18,7 +18,7 @@ pip install protocrash
 
 ### Install from Source
 ```bash
-git clone https://github.com/noobforanonymous/ProtoCrash.git
+git clone https://github.com/regaan/ProtoCrash.git
 cd ProtoCrash
 pip install -e .
 ```
